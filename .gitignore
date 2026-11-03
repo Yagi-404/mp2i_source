@@ -1,2 +1,4 @@
-*.bat
-*.txt
+/.vscode
+*.pdf
+/output
+/source_c/test.c
