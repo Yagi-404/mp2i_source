@@ -1,278 +1,317 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include <math.h>
-#include <ctype.h>
 
-// Exo 10
+//* Exercices
 
-int multarr(double a, double b)
-{
-    // l'ajout de (int) permet de cast a*b, un double, en entier
+// Exercice 20
 
-    return (int) a * b;
-}
-
-int main10(void)
-{
-    printf("multarr : %d", multarr(1.5, 1.7));
-
-    return 0;
-}
-
-// Exo 11
-
-bool moislong(int mois)
-{
-    if(mois < 1 || mois > 12) return false;                                                // n'est pas un mois 
-    if((mois <= 7 && (mois % 2) == 1) || (mois >= 8 && (mois % 2) == 0)) return true;      // est long
-    return false;                                                                          // n'est pas long
-}
-
-int main11(void)
-{
-    printf("\nMois long ? %d", moislong(10));
-
-    return 0;
-}
-
-// Exo 12
-
-char milieu(char* string)
-{
-    int size = strlen(string);
-
-    printf("\n%d", size);
-
-    if(size % 2 == 0) 
-    {
-        // retourne le caractère de gauche
-        // -1 pour le décalage d'indice
-
-        return string[(size/2)-1];
-    }
-
-    // -1 pour que size soit mult de 2
-
-    return string[(size-1)/2];
-}
-
-int main12(void)
-{
-    printf("\nMilieu : %c", milieu("IKEA"));
-
-    return 0;
-}
-
-// Exo 13
-
-int abs(int a)
-{
-    if(a<0) return -a;
-    return a;
-}
-
-int ecartabsmax(int* tab, size_t taille)
-{
-    int min = abs(tab[0]);
-    int max = abs(tab[0]);
-
-    for(size_t i = 0; i <= taille - 1; i++)
-    {
-        if(min > abs(tab[i])) min = abs(tab[i]);
-        if(max < abs(tab[i])) max = abs(tab[i]);
-    }
-    
-    // abs : debug -> !necessaire
-
-    return abs(max - min);
-
-}
-
-int main13(void)
-{
-    int tab[6] = {1,2,3,4,5,6};
-
-    printf("\nEcart max : %d", ecartabsmax(tab, 6));
-
-    return 0;
-}
-
-// Exo 14
-
-int extraire(char* str)
-{
-    int rep;
-    int taille = strlen(str);
-
-    if(taille == 0) return 0;
-    if(taille >= 10) exit(1);
-
-    if(sscanf(str, "%d", &rep)==1) return rep;
-
-    return -1;
-}
-
-int main14(void)
-{
-    printf("\nExtraire : %d", extraire("abc123"));
-
-    return 0;
-}
-
-// Exo 15
-
-int nb1(int x)
+int nbindnb(int* tab, int taille)
 {
     int rep = 0;
+    int occ = 0;
 
-    while(x > 0)
+    for(int i = 0; i < taille; i++)
     {
-        if((x % 2) == 1) rep+=1;
-        x = x/2;
+        occ = 0;
+
+        // <- le compteur d'occurences revient à 0 pour le i-ème élément étudié
+        for(int j = 0; j < taille; j++)
+        {
+            if(tab[i]==tab[j])
+                occ+=1;
+        }
+        
+        // <-> occ vaut le nbr d'occurences du i-ème élément
+
+        if(occ == i)
+            rep+=1;
     }
 
     return rep;
 }
 
-int main15(void)
+// Exercice 21
+
+int nbnbnb(int* tab, int t)
 {
-    printf("\nnb1 : %d", nb1(13));
+    int rep;
+    int occ;
 
-    return 0;
-}
-
-// Exo 16
-
-int prodmin(int* tab1, int* tab2, int taille)
-{
-    int* tab_prod = malloc(sizeof(int)*taille);
-
-    for(int i = 0; i <= taille-1; i++)
-        tab_prod[i] = tab1[i]*tab2[i];
-
-    int prodmin = tab_prod[0];
-
-    for(int i = 0; i <= taille-1; i++)
+    for(int i = 0; i < t; i++)
     {
-        if(prodmin >= tab_prod[i])
-            prodmin = tab_prod[i];
+        occ = 0;
+        
+        if(tab[i] <= 0) // on ne traite les éléments négatifs
+            continue;
+
+        for(int j = 0; j < t; j++)
+        {
+            if(tab[i]==tab[j])
+                occ+=1;
+        }
+
+        if(tab[i] == occ)
+            rep+=1;
     }
-
-    return prodmin;
-}
-
-int main16(void)
-{
-    int tab1[3] = {1,2,3};
-    int tab2[3] = {2,2,2};
-
-    printf("\nprodmin : %d", prodmin(tab1, tab2, 3));
-
-    return 0;
-}
-
-// Exo 17
-
-bool moyent(int* tab, double taille)
-{
-    double somme;
-
-    for(int i = 0; i < taille; i++)
-        somme = somme + tab[i];
     
-    double moy = somme / taille;
-
-    if(floor(moy) == moy) // cond entier
-        return true;
-
-    return false;
+    return rep;
 }
 
-int main17(void)
+// Exercice 22
+
+int nbsomindnb(int* tab, int t)
 {
-    int tab[5] = {3,3,3,3,3};
+    int rep;
+    int sum;
 
-    printf("\nmoyent : %d", moyent(tab, 5));
-
-    return 0;
-}
-
-// Exo 18
-
-int* bezout(int a, int b)
-{
-    if(a<1 || b<1)
-        return ;
-
-    int r = a;
-    int r_ = b;
-    int u = 1;
-    int v = 0;
-    int u_ = 0;
-    int v_ = 1;
-
-    int q, rs, us, vs;
-
-    while(r_ != 0)
+    for(int i = 0; i < t; i++)
     {
-        q = r / r_;
-        rs = r;
-        us = u;
-        vs = v;
-        r = r_;
-        u = u_;
-        v = v_;
+        if(tab[i] < 0) continue; // on ne traite pas les nombres négatifs
 
-        r_ = rs - q*r_;
-        u_ = us - q*u_;
-        v_ = vs - q*v_;
+        sum = 0;
+        for(int j = 0; j < t; j++)
+        {
+            // occurences
+            if(tab[i]==tab[j])
+                sum+=j;
+        }
+        // -> sum : somme des indices auxquels il y a une occurence de tab[i]
+
+        if(tab[i] == sum)
+            rep+=1;
     }
 
-    int couple[2] = {u,v};
-
-    return couple;
+    return rep;
 }
 
-int main18(void)
-{
-    int cpl[2] = bezout(2,3);
+// Exercice 23
 
-    printf("\nbezout : %d %d", cpl[0], cpl[1]);
+int prodind(int* tab, int t, int n)
+{
+    int prod = 1;
+
+    for(int i = 0; i < t; i++)
+    {
+        if(tab[i] == n)
+            prod*=i;
+    }
+
+    return prod;
+}
+
+// Excercice 24
+
+char* cycle(char* string, int n)
+{
+    int   len = strlen(string);
+    char* rep = malloc(sizeof(char) * (len+1));
+
+    // fin
+    for(int i = n; string[i] != '\0'; i++)
+        rep[i - n] = string[i];
+
+    // debut
+    for(int i = 0; i < n; i++)
+        rep[len - n + i] = string[i];
+
+    // caractère de fin de chaîne
+    rep[len] = '\0';
+
+    return rep;
+}
+
+// Exercice 25
+
+char** cycles(char* str)
+{
+    int len = strlen(str);
+    char** strs = malloc(sizeof(char*) * (len));
+
+    for(int i = 0; str[i] != '\0'; i++)
+        strs[i] = cycle(str, i);
+
+    return strs;
+}
+
+// Exercice 26
+
+char* cyclemin(char* str)
+{
+    int len = strlen(str);
+    char** strs = cycles(str); // taille strs : len
+    char* strmin = strs[0];
+
+    for(int i = 1; i < len; i++)
+    {
+        if(strcmp(strmin, strs[i]) > 0)
+            strmin = strs[i];
+    }
+
+    return strmin;
+}
+
+// Exercice 27
+
+void trichaine(char* str)
+{
+    for(int i = 0; str[i] != '\0'; i++)
+    {
+        for(int j = i+1; str[j] != '\0'; j++)
+        {
+            if(str[j] < str[i])
+            {
+                char tp = str[i];
+                str[i] = str[j];
+                str[j] = tp;
+            }
+        }
+    }
+}
+
+// Exercice 28
+
+int val(char c)
+{
+    switch (c)
+    {
+    case 'M':
+        return 1000;
+    case 'D':
+        return 500;
+    case 'C':
+        return 100;
+    case 'L':
+        return 50;
+    case 'X':
+        return 10;
+    case 'V':
+        return 5;
+    case 'I':
+        return 1;
+    default:
+        return 0;
+    }
+}
+
+int tibere(char* str)
+{
+    int rep, i;
+
+    for(i = 0; str[i+1] != '\0'; i++)
+    {
+        if(val(str[i+1]) > val(str[i]))
+        {
+            rep = rep - val(str[i]);
+        } else {
+            rep = rep + val(str[i]);
+        }
+    }
+    
+    rep += val(str[i]);
+
+    return rep;
+}
+
+//* Main des exos
+
+int main20()
+{
+    int tab[] = {1, 0, 2, 3};
+    int s = 4;
+
+    printf("nbindnb : %d", nbindnb(tab, s));
+    return 0;
+}
+
+int main21()
+{
+    int tab[] = {0, 1, 2, 2};
+    int t = 4;
+
+    printf("nbnbnb : %d\n", nbnbnb(tab, t));
+    return 0;
+}
+
+int main22()
+{
+    int tab[] = {0, 1};
+
+    int t = 2;
+
+    printf("nbsomindnb : %d\n", nbsomindnb(tab, t));
+    return 0;
+}
+
+int main23()
+{
+    int n = 1;
+    int tab[] = {0, 1, 1, 1}; // retourne 6
+    int t = 4;
+
+    printf("prodind : %d\n", prodind(tab, t, n));
+    return 0;
+}
+
+int main24()
+{
+    int n = 3;
+    char* string = "Exemple";
+
+    printf("cycle : %s\n", cycle(string, n));
+    return 0;
+}
+
+int main25()
+{
+    char* str   = "Exemple";
+    char** strs = cycles(str);
+
+    printf("cycles : \n");
+    for(int i = 0; i < 7; i++)
+        printf("%s\n", strs[i]);
+    return 0;
+}
+
+int main26()
+{
+    char* str = "ABBA"; // renvoie AABB
+    printf("cyclemin : %s\n", cyclemin(str));
 
     return 0;
 }
 
-// Exo 19
-
-int base(int b, int input)
+int main27()
 {
-    // on pourrait s'inspirer de nb1
+    char str[] = "DCBA";
+    trichaine(str);
+    printf("trichaine : %s\n", str);
 
     return 0;
 }
 
-int main19(void)
+int main28()
 {
-    printf("\nbase : %d", base(2, 10));
+    char str[] = "MMDCC"; // 2700 
+
+    printf("tibere : %d\n", tibere(str));
 
     return 0;
 }
 
-/// MAIN ///
+//* Main final
 
 int main(void)
 {
-    int zero = main10();
-    zero = main11();
-    zero = main12();
-    zero = main13();
-    zero = main14();
-    zero = main15();
-    zero = main16();
-    zero = main17();
-    zero = main18();
-    zero = main19();
+    int zero = main20();
+    zero = main21();
+    zero = main22();
+    zero = main23();
+    zero = main24();
+    zero = main25();
+    zero = main26();
+    zero = main27();
+    zero = main28();
+
     return zero;
 }
