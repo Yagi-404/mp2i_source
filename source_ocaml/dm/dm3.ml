@@ -27,15 +27,15 @@ let rec pairs (l : int list) : int list = match l with
 
 let demipairs (l : int list) : int list = 
 	let lst = pairs l in
-	
+
 	let rec alt (keeps : bool) (li_pairs : int list) : int list = match li_pairs with
 	| [] -> []
 	| a::q -> 
-	if keeps then
-		a :: alt false q
-	else
+	if keeps then 
+		a :: alt false q 
+	else 
 		alt true q
-	
+
 	in alt true lst;;
 
 (* Exo 33 *)
@@ -85,5 +85,49 @@ let duel ((l : 'a list), (m : 'a list)) : bool =
 let nbchf (n : int) : int =
 	let rec getchfs (k : int) (chfs : int list) : int list =
 		if k = 0 then chfs
-	        else getchfs (k/10) ((k mod 10)::chfs)
+		else getchfs (k/10) ((k mod 10)::chfs)
 	in List.length (getchfs n []);;
+
+(* Exo 37 *)
+
+let rec to_li (n : int) : int list = match n with
+	| 0 -> []
+	| a -> (a mod 10)::(to_li (n/10));;
+
+let rec to_int (l : int list) : int = match l with
+	| [] -> failwith "nil"
+	| [d] -> d
+	| a::q -> (a * (pow 10 (List.length q))) + to_int q;;
+
+let rec reverse (l : int list) (a : int list) : int list =
+	match l with
+	| [] -> a
+	| b::q -> reverse q (b::a);;
+
+let entrezeros (n : int) : int =
+	let listed = reverse (to_li n) [] in
+	let rec parse (counter : int) (l : int list) (rep : int list) : int list =
+		match counter with
+		| 2 -> reverse rep []
+		| count ->
+			match l with
+			| [] -> [0]
+			| 0::q -> parse (count + 1) q rep
+			| a::q ->
+				if count = 0 then
+					parse count q rep
+				else 
+					parse count q (a::rep)
+	in to_int (parse 0 listed []);;
+
+(* Exo 38 *)
+
+let maxentrezeros (n : int) : int =
+	let listed = reverse (to_li n) [] in
+	let max x y = if x > y then x else y in
+	let rec parse (l : int list) (cur : int) (maxl : int) : int =
+		match l with
+		| [] -> max cur maxl
+		| 0::q -> parse q 0 maxl
+		| a::q -> parse q (a + (cur*10)) (max (a + cur*10) maxl)
+	in parse listed 0 0;;
