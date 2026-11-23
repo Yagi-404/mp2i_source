@@ -2,3 +2,6 @@
 *.pdf
 /output
 /source_c/test.c
+*.exe
+/source_ocaml/ocamlenv
+/source_ocaml/dm/$

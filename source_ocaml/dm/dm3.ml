@@ -5,7 +5,6 @@ let rec pow (a : int) (b : int) : (int) =
 	else a * (pow a (b - 1));;
 
 let rec bord (n : int) : (int ref) = 
-	assert(n > 0);
 	let temp = ref 0 in
 	let rep = ref n in
 	while !rep > 0 do
@@ -26,6 +25,65 @@ let rec pairs (l : int list) : int list = match l with
 	| [] -> []
 	| a::q -> if (a mod 2) = 0 then a::(pairs q) else pairs q;;
 
-let rec demipairs (l : list) : list = match l with
-	| [] | [a] -> failwith "List too short"
-	| 
+let demipairs (l : int list) : int list = 
+	let lst = pairs l in
+	
+	let rec alt (keeps : bool) (li_pairs : int list) : int list = match li_pairs with
+	| [] -> []
+	| a::q -> 
+	if keeps then
+		a :: alt false q
+	else
+		alt true q
+	
+	in alt true lst;;
+
+(* Exo 33 *)
+
+let changements (l : int list) : int =
+	match l with
+		| [] | [_] -> 0
+		| a::q ->
+			let count = ref 0 in
+			let maximum = ref a in
+			let rec counts (c:int ref) (m:int ref) (li:int list) : unit =
+				match li with
+					| [] -> ()
+					| b::r -> if b > !m then begin
+						c := !c + 1;
+						m := a
+					end; counts c m r;
+				in counts count maximum l;
+			!count;;
+
+(* Exo 34 *)
+
+let bp (l: 'a list) : int =
+	let sorted = List.sort compare l in
+	
+	let rec counter ((li : 'a list), (srt : 'a list)): int = match (li, srt) with
+		| ([],[]) -> 0
+		| (hns :: ns, hs :: s) -> let iseq = if hns = hs then 1 else 0 in
+			iseq + counter (ns, s)
+		| (_,_) -> failwith "Invalid arguments"
+	in counter (l, sorted);;
+
+(* Exo 35 *)
+
+let duel ((l : 'a list), (m : 'a list)) : bool =
+	let rec delta ((l : 'a list), (m : 'a list)) : int = match (l,m) with
+		| ([],[]) -> 0
+		| (a::q, b::r) -> let dt =
+			if a > b then 1
+			else if a < b then -1
+			else 0 in dt + delta (q,r);
+		| (_,_) -> failwith "Invalid args"
+		in (delta (l,m)) > 0;;
+	
+(* Exo 36 *)
+
+let nbchf (n : int) : int =
+	let rec getchfs (k : int) (chfs : int list) : int list =
+		if k = 0 then chfs
+	        else getchfs (k/10) ((k mod 10)::chfs)
+	in List.length (getchfs n []);;
