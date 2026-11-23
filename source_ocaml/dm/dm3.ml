@@ -131,3 +131,20 @@ let maxentrezeros (n : int) : int =
 		| 0::q -> parse q 0 maxl
 		| a::q -> parse q (a + (cur*10)) (max (a + cur*10) maxl)
 	in parse listed 0 0;;
+
+(* Tests *)
+
+bord 2;;
+avantdernier [1;2;3];; (* 2 *)
+demipairs [1;2;3;4;5;6;7;8;9];; (* [2;6] *)
+changements [1;2;3];; (* 2 *)
+changements [];;
+changements [1];;
+bp [1;2;3];; (* 3 *)
+bp [3;2;1];; (* 1 *)
+duel ([5;6],[2;3]);; (* true *)
+nbchf 123;; (* 3 *)
+entrezeros 3024501;; (* 245 *)
+entrezeros 42;; (* 0 *)
+maxentrezeros 10321032201;; (* 322 *)
+maxentrezeros 0;; (* 0 *)
