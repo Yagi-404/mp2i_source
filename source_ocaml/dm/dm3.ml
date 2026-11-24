@@ -1,3 +1,11 @@
+(*
+DM n°3
+
+Léandro Laurent--Aquino
+
+Le 22/11/2026
+*)
+
 (* Exo 30 *)
 
 let rec pow (a : int) (b : int) : (int) =
